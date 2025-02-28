@@ -3,13 +3,9 @@
 import { notFound } from "next/navigation";
 import { handleShortenedUrl } from "../lib/url";
 
-// interface PageProps {
-//   params: {
-//     slug: string;
-//   };
-// }
-
 export default async function Page({ params }: any) {
+  console.log(params.slug);
+
   const result = await handleShortenedUrl(params.slug);
 
   if (result === null) {
