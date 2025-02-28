@@ -1,16 +1,21 @@
-import { PrismaClient } from "@prisma/client";
-import { redirect } from "next/navigation";
+// app/[slug]/page.tsx
 
-const prisma = new PrismaClient();
+import { notFound } from "next/navigation";
+import { handleShortenedUrl } from "../lib/url";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const urlEntry = await prisma.shortenedUrl.findUnique({
-    where: { slug: params.slug },
-  });
+// interface PageProps {
+//   params: {
+//     slug: string;
+//   };
+// }
 
-  if (urlEntry) {
-    redirect(urlEntry.original); // Redirect to original URL
-  } else {
-    return <h1>404 - Not Found</h1>;
+export default async function Page({ params }: any) {
+  const result = await handleShortenedUrl(params.slug);
+
+  if (result === null) {
+    return notFound();
   }
+
+  // The redirect happens within handleShortenedUrl, so this part should not run if it redirects.
+  return null; // Or an empty fragment: <></>
 }
